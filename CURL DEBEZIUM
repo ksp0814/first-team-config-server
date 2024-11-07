@@ -1,0 +1,46 @@
+curl -X DELETE localhost:8083/connectors/member-ceo-connector
+curl -X DELETE localhost:8083/connectors/member-employee-connector
+
+# CEO 커넥터 다시 생성
+curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
+    "name": "member-ceo-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "tasks.max": "1",
+        "database.hostname": "host.docker.internal",
+        "database.port": "3306",
+        "database.user": "root",
+        "database.password": "1234",
+        "topic.prefix": "mysql-ceo",
+        "database.server.id": "184054",
+        "database.include.list": "member",
+        "table.include.list": "member.ceo",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+        "schema.history.internal.kafka.topic": "schema-changes.member.ceo",
+        "include.schema.changes": "true",
+        "database.connectionTimeZone": "Asia/Seoul",
+        "database.serverTimezone": "Asia/Seoul"
+    }
+}'
+
+# Employee 커넥터 다시 생성
+curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
+    "name": "member-employee-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "tasks.max": "1",
+        "database.hostname": "host.docker.internal",
+        "database.port": "3306",
+        "database.user": "root",
+        "database.password": "1234",
+        "topic.prefix": "mysql-employee",
+        "database.server.id": "184055",
+        "database.include.list": "member",
+        "table.include.list": "member.employee",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+        "schema.history.internal.kafka.topic": "schema-changes.member.employee",
+        "include.schema.changes": "true",
+        "database.connectionTimeZone": "Asia/Seoul",
+        "database.serverTimezone": "Asia/Seoul"
+    }
+}'
